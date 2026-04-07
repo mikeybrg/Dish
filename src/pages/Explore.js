@@ -61,7 +61,7 @@ async function fetchRecipe(apiKey, name) {
 }
 
 // ── Pexels API for food photos ───────────────────────────────────────────────
-const PEXELS_API_KEY = 'YOUR_PEXELS_KEY_HERE'; // Get a free key at pexels.com/api
+const PEXELS_API_KEY = 'BcutZmwK7EwwtOLVuGKL0QmCUar3O0vpyIex4WBzaGd14OG5yD124ybv'; // Get a free key at pexels.com/api
 const _photoCache = {};
 
 function FoodImage({ name, imgClassName }) {
