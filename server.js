@@ -45,7 +45,8 @@ app.post('/api/generate-image', async (req, res) => {
       }),
     });
     const data = await response.json();
-    const url = data.data?.[0]?.url || null;
+    const item = data.data?.[0];
+    const url = item?.url || (item?.b64_json ? `data:image/png;base64,${item.b64_json}` : null);
     res.json({ url });
   } catch (err) {
     res.status(500).json({ error: err.message });
