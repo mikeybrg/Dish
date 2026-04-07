@@ -46,9 +46,55 @@ async function sendChatMessage(messages, recipeName, ingredients) {
   return data.content[0].text;
 }
 
-function getImageUrl(name) {
-  const term = encodeURIComponent(name.toLowerCase().replace(/\s+/g, '+'));
-  return `https://source.unsplash.com/400x300/?${term},food`;
+// ── Pexels API for food photos ───────────────────────────────────────────────
+const PEXELS_API_KEY = 'YOUR_PEXELS_KEY_HERE'; // Get a free key at pexels.com/api
+const _photoCache = {};
+
+function FoodImage({ name, imgClassName }) {
+  const [src, setSrc] = useState(null);
+  useEffect(() => {
+    if (PEXELS_API_KEY === 'YOUR_PEXELS_KEY_HERE') return;
+    if (_photoCache[name]) { setSrc(_photoCache[name]); return; }
+    fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(name + ' food')}&per_page=1`, {
+      headers: { Authorization: PEXELS_API_KEY },
+    })
+      .then(r => r.json())
+      .then(data => {
+        const url = data.photos?.[0]?.src?.medium;
+        if (url) { _photoCache[name] = url; setSrc(url); }
+      })
+      .catch(() => {});
+  }, [name]);
+  if (!src) return null;
+  return (
+    <img
+      src={src}
+      alt={name}
+      className={imgClassName || 'absolute inset-0 w-full h-full object-cover'}
+      onError={() => setSrc(null)}
+    />
+  );
+}
+
+function YouTubeEmbed({ name }) {
+  const query = encodeURIComponent(name + ' recipe quick');
+  return (
+    <div className="mb-5">
+      <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: '#6B7280' }}>
+        Watch how to make it
+      </p>
+      <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px', backgroundColor: '#F3F4F6' }}>
+        <iframe
+          src={`https://www.youtube.com/embed?listType=search&list=${query}`}
+          title={`How to make ${name}`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', borderRadius: '12px', border: 'none' }}
+        />
+      </div>
+    </div>
+  );
 }
 
 const DIFF_COLORS = {
@@ -398,13 +444,8 @@ export default function Recipes({ apiKey }) {
                   onClick={() => openRecipe(recipe)}
                   className="flex-shrink-0 w-48 rounded-2xl overflow-hidden border border-gray-200 bg-white hover:border-gray-300 hover:shadow-md hover:scale-[1.02] transition-all text-left group cursor-pointer shadow-sm"
                 >
-                  <div className="h-28 relative overflow-hidden bg-gray-100">
-                    <img
-                      src={getImageUrl(recipe.name)}
-                      alt={recipe.name}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={e => { e.currentTarget.style.display = 'none'; }}
-                    />
+                  <div className="h-28 relative overflow-hidden bg-gray-200">
+                    <FoodImage name={recipe.name} imgClassName="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     <span className="absolute bottom-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/80 backdrop-blur-sm" style={{ color: '#374151' }}>
                       {recipe.cuisine}
                     </span>
@@ -447,13 +488,8 @@ export default function Recipes({ apiKey }) {
         >
           <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             {/* Photo banner */}
-            <div className="h-44 relative rounded-t-2xl overflow-hidden bg-gray-100 flex-shrink-0">
-              <img
-                src={getImageUrl(modal.recipe.name)}
-                alt={modal.recipe.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={e => { e.currentTarget.style.display = 'none'; }}
-              />
+            <div className="h-44 relative rounded-t-2xl overflow-hidden bg-gray-200 flex-shrink-0">
+              <FoodImage name={modal.recipe.name} />
               <span className="absolute bottom-4 left-5 text-xs font-semibold px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm" style={{ color: '#374151' }}>
                 {modal.recipe.cuisine}
               </span>
@@ -511,6 +547,9 @@ export default function Recipes({ apiKey }) {
                       ))}
                     </ul>
                   </div>
+
+                  {/* YouTube embed */}
+                  <YouTubeEmbed name={modal.data.name} />
 
                   <RecipeGuide
                     recipe={modal.data}

@@ -56,6 +56,10 @@ function getFoodImageUrl(name) {
   return `https://source.unsplash.com/400x300/?${term},food`;
 }
 
+function getYouTubeUrl(name) {
+  return `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(name + ' recipe quick')}`;
+}
+
 // ── Component ───────────────────────────────────────────────────────────────
 
 const GREETING = {
@@ -87,12 +91,16 @@ export default function Chat({ apiKey }) {
       const reply = await sendToAPI(apiKey, apiMessages);
 
       let imageUrl = null;
+      let youtubeUrl = null;
       if (isFoodResponse(reply)) {
         const foodName = extractFoodName(reply);
-        if (foodName) imageUrl = getFoodImageUrl(foodName);
+        if (foodName) {
+          imageUrl = getFoodImageUrl(foodName);
+          youtubeUrl = getYouTubeUrl(foodName);
+        }
       }
 
-      setMessages(prev => [...prev, { role: 'assistant', content: reply, imageUrl }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: reply, imageUrl, youtubeUrl }]);
     } catch (err) {
       const msg = apiKey === 'YOUR_KEY_HERE'
         ? 'Add your Anthropic API key in App.js to start chatting.'
@@ -123,17 +131,36 @@ export default function Chat({ apiKey }) {
               )}
 
               {msg.role === 'assistant' ? (
-                <div className="max-w-[78%] rounded-2xl rounded-bl-sm overflow-hidden border border-gray-200 bg-white text-sm leading-relaxed shadow-sm" style={{ color: '#1A1A1A' }}>
-                  {msg.imageUrl && (
-                    <img
-                      src={msg.imageUrl}
-                      alt="food"
-                      className="w-full object-cover"
-                      style={{ height: 200 }}
-                      onError={e => { e.currentTarget.style.display = 'none'; }}
-                    />
+                <div className="max-w-[78%] flex flex-col gap-2">
+                  <div className="rounded-2xl rounded-bl-sm overflow-hidden border border-gray-200 bg-white text-sm leading-relaxed shadow-sm" style={{ color: '#1A1A1A' }}>
+                    {msg.imageUrl && (
+                      <img
+                        src={msg.imageUrl}
+                        alt="food"
+                        className="w-full object-cover"
+                        style={{ height: 200 }}
+                        onError={e => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    )}
+                    <p className="px-4 py-3 whitespace-pre-wrap">{msg.content}</p>
+                  </div>
+                  {msg.youtubeUrl && (
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wide mb-1.5 ml-1" style={{ color: '#9CA3AF' }}>
+                        Watch how to make it
+                      </p>
+                      <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px', backgroundColor: '#F3F4F6' }}>
+                        <iframe
+                          src={msg.youtubeUrl}
+                          title="Recipe video"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', borderRadius: '12px', border: 'none' }}
+                        />
+                      </div>
+                    </div>
                   )}
-                  <p className="px-4 py-3 whitespace-pre-wrap">{msg.content}</p>
                 </div>
               ) : (
                 <div className="max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap text-white rounded-br-sm" style={{ backgroundColor: '#2D6A4F' }}>
