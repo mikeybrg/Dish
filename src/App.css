@@ -41,7 +41,20 @@
 /* Quick-view scrollbar */
 .rg-quickview-list::-webkit-scrollbar { width: 4px; }
 .rg-quickview-list::-webkit-scrollbar-track { background: transparent; }
-.rg-quickview-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+.rg-quickview-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
 
 /* Hide scrollbar utility (for horizontal recipe rows) */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Skeleton loading shimmer */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}

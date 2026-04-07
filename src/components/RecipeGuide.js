@@ -27,40 +27,43 @@ function getStepMeta(text) {
   return { emoji: '👨‍🍳', theme: 'blue' };
 }
 
-// ── Colour palettes ─────────────────────────────────────────────────────────
+// ── Light colour palettes ────────────────────────────────────────────────────
 const T = {
   orange: {
-    bg:         'linear-gradient(140deg, #3b0d00 0%, #450a0a 100%)',
+    bg:         '#FFF7F0',
     blob:       '#f97316',
-    bar:        '#f97316',
-    ring:       'rgba(249,115,22,0.14)',
-    ringBorder: 'rgba(249,115,22,0.32)',
-    label:      '#fb923c',
-    border:     'rgba(249,115,22,0.22)',
-    btn:        '#ea580c',
-    btnHov:     '#f97316',
+    bar:        '#EA580C',
+    ring:       'rgba(249,115,22,0.10)',
+    ringBorder: 'rgba(249,115,22,0.28)',
+    label:      '#C2410C',
+    border:     'rgba(249,115,22,0.18)',
+    btn:        '#2D6A4F',
+    btnHov:     '#245a42',
+    text:       '#1A1A1A',
   },
   blue: {
-    bg:         'linear-gradient(140deg, #080f2e 0%, #0c1445 100%)',
+    bg:         '#F0F6FF',
     blob:       '#3b82f6',
-    bar:        '#3b82f6',
-    ring:       'rgba(59,130,246,0.14)',
-    ringBorder: 'rgba(59,130,246,0.32)',
-    label:      '#60a5fa',
-    border:     'rgba(59,130,246,0.22)',
-    btn:        '#1d4ed8',
-    btnHov:     '#3b82f6',
+    bar:        '#2563EB',
+    ring:       'rgba(59,130,246,0.10)',
+    ringBorder: 'rgba(59,130,246,0.28)',
+    label:      '#1D4ED8',
+    border:     'rgba(59,130,246,0.18)',
+    btn:        '#2D6A4F',
+    btnHov:     '#245a42',
+    text:       '#1A1A1A',
   },
   green: {
-    bg:         'linear-gradient(140deg, #042011 0%, #052e16 100%)',
+    bg:         '#F0FDF4',
     blob:       '#22c55e',
-    bar:        '#22c55e',
-    ring:       'rgba(34,197,94,0.14)',
-    ringBorder: 'rgba(34,197,94,0.32)',
-    label:      '#4ade80',
-    border:     'rgba(34,197,94,0.22)',
-    btn:        '#15803d',
-    btnHov:     '#22c55e',
+    bar:        '#16A34A',
+    ring:       'rgba(34,197,94,0.10)',
+    ringBorder: 'rgba(34,197,94,0.28)',
+    label:      '#15803D',
+    border:     'rgba(34,197,94,0.18)',
+    btn:        '#2D6A4F',
+    btnHov:     '#245a42',
+    text:       '#1A1A1A',
   },
 };
 
@@ -74,8 +77,8 @@ function ModeToggle({ mode, setMode }) {
         borderRadius: '8px',
         fontSize: '12px',
         fontWeight: 600,
-        background: mode === id ? 'rgba(255,255,255,0.12)' : 'transparent',
-        color: mode === id ? '#fff' : '#6b7280',
+        background: mode === id ? '#2D6A4F' : 'transparent',
+        color: mode === id ? '#fff' : '#6B7280',
         border: 'none',
         cursor: 'pointer',
         transition: 'all 0.15s',
@@ -85,7 +88,7 @@ function ModeToggle({ mode, setMode }) {
     </button>
   );
   return (
-    <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '3px', gap: '2px' }}>
+    <div style={{ display: 'flex', background: 'rgba(0,0,0,0.05)', borderRadius: '10px', padding: '3px', gap: '2px' }}>
       {btn('guided', 'Guided')}
       {btn('quickview', 'Quick View')}
     </div>
@@ -126,12 +129,12 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
     return (
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             All {recipe.steps.length} Steps
           </span>
           <button
             onClick={() => setMode('guided')}
-            style={{ fontSize: '13px', color: '#f97316', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
+            style={{ fontSize: '13px', color: '#2D6A4F', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}
           >
             ← Guided Mode
           </button>
@@ -155,8 +158,8 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
                   gap: '12px',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  border: `1px solid ${active ? t.ringBorder : t.border}`,
-                  background: active ? t.ring : 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${active ? t.ringBorder : 'rgba(0,0,0,0.08)'}`,
+                  background: active ? t.ring : '#FAFAFA',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s',
@@ -180,7 +183,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
                     Step {i + 1}
                   </div>
                   <div style={{
-                    fontSize: '13px', color: '#d1d5db', lineHeight: '1.5',
+                    fontSize: '13px', color: '#374151', lineHeight: '1.5',
                     display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                   }}>
                     {txt}
@@ -208,7 +211,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
         {/* Keep mode toggle visible */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <ModeToggle mode={mode} setMode={setMode} />
-          <span style={{ fontSize: '12px', color: '#6b7280' }}>Done!</span>
+          <span style={{ fontSize: '12px', color: '#6B7280' }}>Done!</span>
         </div>
 
         <div
@@ -224,12 +227,12 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
           }}
         >
           {/* Pulsing blobs */}
-          <div className="rg-pulse-blob" style={{ position: 'absolute', width: '180px', height: '180px', borderRadius: '50%', background: '#22c55e', opacity: 0.07, top: '-50px', right: '-50px', filter: 'blur(48px)', pointerEvents: 'none' }} />
-          <div className="rg-pulse-blob" style={{ position: 'absolute', width: '140px', height: '140px', borderRadius: '50%', background: '#22c55e', opacity: 0.05, bottom: '-40px', left: '-40px', filter: 'blur(40px)', pointerEvents: 'none', animationDelay: '1.4s' }} />
+          <div className="rg-pulse-blob" style={{ position: 'absolute', width: '180px', height: '180px', borderRadius: '50%', background: '#22c55e', opacity: 0.06, top: '-50px', right: '-50px', filter: 'blur(48px)', pointerEvents: 'none' }} />
+          <div className="rg-pulse-blob" style={{ position: 'absolute', width: '140px', height: '140px', borderRadius: '50%', background: '#22c55e', opacity: 0.04, bottom: '-40px', left: '-40px', filter: 'blur(40px)', pointerEvents: 'none', animationDelay: '1.4s' }} />
 
           <div style={{ fontSize: compact ? '54px' : '68px', lineHeight: 1, marginBottom: '14px' }}>🎉</div>
-          <h3 style={{ fontSize: compact ? '20px' : '26px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>You did it!</h3>
-          <p style={{ fontSize: compact ? '14px' : '15px', color: '#4ade80', marginBottom: '28px' }}>
+          <h3 style={{ fontSize: compact ? '20px' : '26px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px' }}>You did it!</h3>
+          <p style={{ fontSize: compact ? '14px' : '15px', color: '#15803D', marginBottom: '28px' }}>
             Your {recipe.name} is ready to enjoy.
           </p>
 
@@ -239,7 +242,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
               display: 'block', width: '100%',
               padding: compact ? '11px' : '14px',
               borderRadius: '12px',
-              background: '#15803d',
+              background: '#2D6A4F',
               color: '#fff',
               fontWeight: 600,
               fontSize: compact ? '14px' : '15px',
@@ -248,8 +251,8 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
               marginBottom: '10px',
               transition: 'background 0.15s',
             }}
-            onMouseOver={e => { e.currentTarget.style.background = '#22c55e'; }}
-            onMouseOut={e =>  { e.currentTarget.style.background = '#15803d'; }}
+            onMouseOver={e => { e.currentTarget.style.background = '#245a42'; }}
+            onMouseOut={e =>  { e.currentTarget.style.background = '#2D6A4F'; }}
           >
             🎉 Share your meal
           </button>
@@ -260,16 +263,16 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
               display: 'block', width: '100%',
               padding: compact ? '9px' : '11px',
               borderRadius: '12px',
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: '#9ca3af',
+              background: 'rgba(0,0,0,0.04)',
+              border: '1px solid rgba(0,0,0,0.08)',
+              color: '#6B7280',
               fontWeight: 500,
               fontSize: '13px',
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
-            onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseOut={e =>  { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#9ca3af'; }}
+            onMouseOver={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; e.currentTarget.style.color = '#1A1A1A'; }}
+            onMouseOut={e =>  { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = '#6B7280'; }}
           >
             ← Start Over
           </button>
@@ -286,7 +289,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
       {/* Header row: mode toggle + counter */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
         <ModeToggle mode={mode} setMode={setMode} />
-        <span style={{ fontSize: '12px', color: '#6b7280' }}>
+        <span style={{ fontSize: '12px', color: '#6B7280' }}>
           Step {step + 1} of {recipe.steps.length}
         </span>
       </div>
@@ -311,7 +314,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
             width: '220px', height: '220px',
             borderRadius: '50%',
             background: theme.blob,
-            opacity: 0.07,
+            opacity: 0.06,
             top: '-60px', right: '-60px',
             filter: 'blur(56px)',
             pointerEvents: 'none',
@@ -324,7 +327,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
             width: '140px', height: '140px',
             borderRadius: '50%',
             background: theme.blob,
-            opacity: 0.04,
+            opacity: 0.03,
             bottom: '-30px', left: '20px',
             filter: 'blur(40px)',
             pointerEvents: 'none',
@@ -354,14 +357,14 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
           </div>
 
           {/* Progress bar */}
-          <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', marginBottom: compact ? '16px' : '22px', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '3px', background: 'rgba(0,0,0,0.08)', borderRadius: '4px', marginBottom: compact ? '16px' : '22px', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${progress}%`, background: theme.bar, borderRadius: '4px', transition: 'width 0.5s ease' }} />
           </div>
 
           {/* Instruction text */}
           <p style={{
             fontSize: compact ? '15px' : '18px',
-            color: '#f3f4f6',
+            color: '#1A1A1A',
             lineHeight: '1.68',
             fontWeight: 400,
             marginBottom: compact ? '22px' : '30px',
@@ -377,17 +380,17 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
               style={{
                 padding: compact ? '10px 16px' : '12px 20px',
                 borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'rgba(255,255,255,0.05)',
-                color: step === 0 ? '#374151' : '#9ca3af',
+                border: '1px solid rgba(0,0,0,0.10)',
+                background: 'rgba(0,0,0,0.04)',
+                color: step === 0 ? '#D1D5DB' : '#6B7280',
                 fontSize: '13px',
                 fontWeight: 500,
                 cursor: step === 0 ? 'not-allowed' : 'pointer',
                 flexShrink: 0,
                 transition: 'all 0.15s',
               }}
-              onMouseOver={e => { if (step !== 0) { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#fff'; } }}
-              onMouseOut={e =>  { if (step !== 0) { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#9ca3af'; } }}
+              onMouseOver={e => { if (step !== 0) { e.currentTarget.style.background = 'rgba(0,0,0,0.08)'; e.currentTarget.style.color = '#1A1A1A'; } }}
+              onMouseOut={e =>  { if (step !== 0) { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = '#6B7280'; } }}
             >
               ← Back
             </button>

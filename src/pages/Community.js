@@ -244,7 +244,7 @@ export default function Community() {
       name: 'You',
       username: 'you',
       initials: 'ME',
-      avatarColor: 'from-orange-500 to-orange-600',
+      avatarColor: 'from-green-600 to-teal-600',
       ts: Date.now(),
       caption: shareCaption,
       color: POST_GRADIENTS[Math.floor(Math.random() * POST_GRADIENTS.length)],
@@ -267,12 +267,13 @@ export default function Community() {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-8">
             <div>
-              <h1 className="text-4xl font-bold mb-1">Community</h1>
-              <p className="text-gray-400 text-sm">What students are cooking right now</p>
+              <h1 className="text-4xl font-bold mb-1" style={{ color: '#1A1A1A' }}>Community</h1>
+              <p className="text-sm" style={{ color: '#6B7280' }}>What students are cooking right now</p>
             </div>
             <button
               onClick={() => setShowShareModal(true)}
-              className="flex-shrink-0 px-5 py-2.5 bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-xl text-sm transition-colors"
+              className="flex-shrink-0 px-5 py-2.5 text-white font-semibold rounded-xl text-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: '#2D6A4F' }}
             >
               + Share Your Meal
             </button>
@@ -287,15 +288,15 @@ export default function Community() {
               const isExpanded     = !!expanded[post.id];
 
               return (
-                <div key={post.id} className="rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden">
+                <div key={post.id} className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
                   {/* Header */}
                   <div className="flex items-center gap-3 p-4 pb-3">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${post.avatarColor} flex items-center justify-center text-xs font-bold text-white flex-shrink-0`}>
                       {post.initials}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm">{post.name}</p>
-                      <p className="text-xs text-gray-500">@{post.username} · {timeAgo(post.ts)}</p>
+                      <p className="font-semibold text-sm" style={{ color: '#1A1A1A' }}>{post.name}</p>
+                      <p className="text-xs" style={{ color: '#9CA3AF' }}>@{post.username} · {timeAgo(post.ts)}</p>
                     </div>
                   </div>
 
@@ -307,19 +308,19 @@ export default function Community() {
 
                   {/* Caption + actions */}
                   <div className="p-4">
-                    <p className="text-sm text-gray-200 mb-3 leading-relaxed">{post.caption}</p>
+                    <p className="text-sm mb-3 leading-relaxed" style={{ color: '#374151' }}>{post.caption}</p>
 
                     <div className="flex items-center gap-5">
                       <button
                         onClick={() => toggleLike(post.id)}
-                        className={`flex items-center gap-1.5 text-sm transition-colors ${liked ? 'text-red-400' : 'text-gray-500 hover:text-red-400'}`}
+                        className={`flex items-center gap-1.5 text-sm transition-colors ${liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
                       >
                         <span>{liked ? '❤️' : '🤍'}</span>
                         <span>{totalLikes}</span>
                       </button>
                       <button
                         onClick={() => toggleExpand(post.id)}
-                        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition-colors"
+                        className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors"
                       >
                         <span>💬</span>
                         <span>{totalComments}</span>
@@ -327,17 +328,17 @@ export default function Community() {
                     </div>
 
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-white/5">
+                      <div className="mt-4 pt-4 border-t border-gray-100">
                         {(post.preComments?.length > 0 || userComments.length > 0) && (
                           <div className="space-y-2 mb-3 max-h-32 overflow-y-auto">
                             {(post.preComments || []).map((c, i) => (
-                              <p key={`pre-${i}`} className="text-xs text-gray-400">
-                                <span className="font-medium text-gray-300">{c.user}</span> {c.text}
+                              <p key={`pre-${i}`} className="text-xs text-gray-500">
+                                <span className="font-medium text-gray-700">{c.user}</span> {c.text}
                               </p>
                             ))}
                             {userComments.map((c, i) => (
-                              <p key={`user-${i}`} className="text-xs text-gray-400">
-                                <span className="font-medium text-gray-300">you</span> {c.text}
+                              <p key={`user-${i}`} className="text-xs text-gray-500">
+                                <span className="font-medium text-gray-700">you</span> {c.text}
                               </p>
                             ))}
                           </div>
@@ -348,11 +349,15 @@ export default function Community() {
                             onChange={e => setCommentInputs(p => ({ ...p, [post.id]: e.target.value }))}
                             onKeyDown={e => e.key === 'Enter' && addComment(post.id)}
                             placeholder="Add a comment..."
-                            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-orange-500/50 transition-colors"
+                            className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs placeholder-gray-400 outline-none transition-colors"
+                            style={{ color: '#1A1A1A' }}
+                            onFocus={e => e.target.style.borderColor = '#2D6A4F'}
+                            onBlur={e => e.target.style.borderColor = '#E5E7EB'}
                           />
                           <button
                             onClick={() => addComment(post.id)}
-                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-white rounded-lg text-xs font-medium transition-colors"
+                            className="px-3 py-1.5 text-white rounded-lg text-xs font-medium transition-all hover:opacity-90"
+                            style={{ backgroundColor: '#2D6A4F' }}
                           >
                             Post
                           </button>
@@ -369,24 +374,24 @@ export default function Community() {
         {/* ── Sidebar ───────────────────────────────────────────── */}
         <div className="w-64 flex-shrink-0 space-y-5 sticky top-24">
           {/* Trending */}
-          <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5">
-            <h3 className="font-semibold text-sm mb-4">🔥 Trending Dishes</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h3 className="font-semibold text-sm mb-4" style={{ color: '#1A1A1A' }}>🔥 Trending Dishes</h3>
             <div className="space-y-3">
               {TRENDING.map((item, i) => (
                 <div key={i} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="text-xs text-gray-600 w-4 flex-shrink-0">{i + 1}</span>
-                    <span className="text-sm text-gray-300 truncate">{item.name}</span>
+                    <span className="text-xs text-gray-400 w-4 flex-shrink-0">{i + 1}</span>
+                    <span className="text-sm truncate" style={{ color: '#374151' }}>{item.name}</span>
                   </div>
-                  <span className="text-[11px] text-gray-500 flex-shrink-0">{item.count}</span>
+                  <span className="text-[11px] text-gray-400 flex-shrink-0">{item.count}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Active cooks */}
-          <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-5">
-            <h3 className="font-semibold text-sm mb-4">👨‍🍳 Active Cooks</h3>
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h3 className="font-semibold text-sm mb-4" style={{ color: '#1A1A1A' }}>👨‍🍳 Active Cooks</h3>
             <div className="space-y-4">
               {ACTIVE_COOKS.map((cook, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -394,8 +399,8 @@ export default function Community() {
                     {cook.initials}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium truncate">{cook.name}</p>
-                    <p className="text-[11px] text-gray-500 truncate">{cook.activity}</p>
+                    <p className="text-xs font-medium truncate" style={{ color: '#1A1A1A' }}>{cook.name}</p>
+                    <p className="text-[11px] truncate" style={{ color: '#9CA3AF' }}>{cook.activity}</p>
                   </div>
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
                 </div>
@@ -408,36 +413,36 @@ export default function Community() {
       {/* ── Share modal ───────────────────────────────────────────── */}
       {showShareModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm"
           onClick={e => e.target === e.currentTarget && setShowShareModal(false)}
         >
-          <div className="bg-[#111] rounded-2xl border border-white/10 w-full max-w-md">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-xl w-full max-w-md">
             <div className="p-6">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold">Share Your Meal</h2>
-                <button onClick={() => setShowShareModal(false)} className="text-gray-500 hover:text-white text-2xl leading-none">×</button>
+                <h2 className="text-lg font-bold" style={{ color: '#1A1A1A' }}>Share Your Meal</h2>
+                <button onClick={() => setShowShareModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
               </div>
 
               {/* Photo upload */}
               <div
                 onClick={() => fileRef.current.click()}
                 className={`relative rounded-xl border-2 border-dashed cursor-pointer transition-all mb-4 flex items-center justify-center overflow-hidden ${
-                  shareImage ? 'border-transparent' : 'border-white/10 hover:border-orange-500/40 hover:bg-white/[0.02]'
+                  shareImage ? 'border-transparent' : 'border-gray-200 hover:border-[#2D6A4F]/40 hover:bg-gray-50'
                 }`}
                 style={{ height: 200 }}
               >
                 {shareImage ? (
                   <>
                     <img src={shareImage} alt="preview" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                      <span className="text-sm font-medium text-white bg-black/60 px-4 py-2 rounded-lg">Change Photo</span>
+                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      <span className="text-sm font-medium text-white bg-black/50 px-4 py-2 rounded-lg">Change Photo</span>
                     </div>
                   </>
                 ) : (
                   <div className="text-center">
                     <div className="text-4xl mb-2">📷</div>
-                    <p className="text-sm text-gray-400 font-medium">Add a photo</p>
-                    <p className="text-xs text-gray-600 mt-1">Optional · JPG, PNG, WEBP</p>
+                    <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Add a photo</p>
+                    <p className="text-xs mt-1" style={{ color: '#9CA3AF' }}>Optional · JPG, PNG, WEBP</p>
                   </div>
                 )}
                 <input
@@ -461,20 +466,24 @@ export default function Community() {
                 onChange={e => setShareCaption(e.target.value)}
                 placeholder="What did you make? How did it go? 🍳"
                 rows={3}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-orange-500/50 transition-colors resize-none mb-4"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm placeholder-gray-400 outline-none transition-colors resize-none mb-4"
+                style={{ color: '#1A1A1A' }}
+                onFocus={e => e.target.style.borderColor = '#2D6A4F'}
+                onBlur={e => e.target.style.borderColor = '#E5E7EB'}
               />
 
               <div className="flex gap-3">
                 <button
                   onClick={() => { setShowShareModal(false); setShareCaption(''); setShareImage(null); }}
-                  className="flex-1 py-2.5 border border-white/10 text-gray-400 hover:text-white hover:border-white/20 rounded-xl text-sm font-medium transition-colors"
+                  className="flex-1 py-2.5 border border-gray-200 text-gray-500 hover:text-gray-700 hover:border-gray-300 rounded-xl text-sm font-medium transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={submitPost}
                   disabled={!shareCaption.trim()}
-                  className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-400 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex-1 py-2.5 text-white rounded-xl text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: '#2D6A4F' }}
                 >
                   Share
                 </button>

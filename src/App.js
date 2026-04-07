@@ -17,11 +17,11 @@ export default function App() {
   const [page, setPage] = useState('Home');
 
   return (
-    <div className="min-h-screen text-white" style={{ backgroundColor: '#0a0a0a' }}>
-      <nav className="sticky top-0 z-50 border-b border-white/5 backdrop-blur-md" style={{ backgroundColor: 'rgba(10,10,10,0.9)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F8F8F6', color: '#1A1A1A' }}>
+      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-[1200px] mx-auto px-8 flex items-center justify-between h-16">
-          <button onClick={() => setPage('Home')} className="text-xl font-bold text-orange-500 tracking-tight">
-            dish
+          <button onClick={() => setPage('Home')} className="text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: '#2D6A4F' }}>
+            👨‍🍳 Apron AI
           </button>
           <div className="flex gap-1">
             {NAV.map(id => (
@@ -29,8 +29,11 @@ export default function App() {
                 key={id}
                 onClick={() => setPage(id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  page === id ? 'bg-orange-500 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  page === id
+                    ? 'text-white'
+                    : 'text-gray-500 hover:text-[#1A1A1A] hover:bg-gray-100'
                 }`}
+                style={page === id ? { backgroundColor: '#2D6A4F' } : {}}
               >
                 {id}
               </button>

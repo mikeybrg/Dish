@@ -106,9 +106,9 @@ export default function Chat({ apiKey }) {
   return (
     <div className="max-w-[1200px] mx-auto px-8">
       <div className="max-w-2xl mx-auto flex flex-col" style={{ height: 'calc(100vh - 64px)' }}>
-        <div className="pt-10 pb-6 border-b border-white/5">
-          <h1 className="text-3xl font-bold">Ask the Chef</h1>
-          <p className="text-gray-500 text-sm mt-1">Your personal AI cooking assistant</p>
+        <div className="pt-10 pb-6 border-b border-gray-200">
+          <h1 className="text-3xl font-bold" style={{ color: '#1A1A1A' }}>Ask the Chef</h1>
+          <p className="text-sm mt-1" style={{ color: '#6B7280' }}>Your personal AI cooking assistant</p>
         </div>
 
         {/* Messages */}
@@ -117,14 +117,13 @@ export default function Chat({ apiKey }) {
             <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
 
               {msg.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-base flex-shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-base flex-shrink-0 mt-0.5" style={{ backgroundColor: '#2D6A4F' }}>
                   👨‍🍳
                 </div>
               )}
 
-              {/* Assistant bubble — with or without image */}
               {msg.role === 'assistant' ? (
-                <div className="max-w-[78%] rounded-2xl rounded-bl-sm overflow-hidden border border-white/5 bg-white/5 text-sm text-gray-200 leading-relaxed">
+                <div className="max-w-[78%] rounded-2xl rounded-bl-sm overflow-hidden border border-gray-200 bg-white text-sm leading-relaxed shadow-sm" style={{ color: '#1A1A1A' }}>
                   {msg.imageUrl && (
                     <img
                       src={msg.imageUrl}
@@ -137,7 +136,7 @@ export default function Chat({ apiKey }) {
                   <p className="px-4 py-3 whitespace-pre-wrap">{msg.content}</p>
                 </div>
               ) : (
-                <div className="max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap bg-orange-500 text-white rounded-br-sm">
+                <div className="max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap text-white rounded-br-sm" style={{ backgroundColor: '#2D6A4F' }}>
                   {msg.content}
                 </div>
               )}
@@ -147,10 +146,10 @@ export default function Chat({ apiKey }) {
 
           {loading && (
             <div className="flex gap-3 justify-start">
-              <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-base flex-shrink-0">👨‍🍳</div>
-              <div className="px-4 py-3.5 rounded-2xl rounded-bl-sm bg-white/5 border border-white/5 flex gap-1.5 items-center">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-base flex-shrink-0" style={{ backgroundColor: '#2D6A4F' }}>👨‍🍳</div>
+              <div className="px-4 py-3.5 rounded-2xl rounded-bl-sm bg-white border border-gray-200 shadow-sm flex gap-1.5 items-center">
                 {[0, 1, 2].map(i => (
-                  <div key={i} className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: `${i * 160}ms` }} />
+                  <div key={i} className="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style={{ animationDelay: `${i * 160}ms` }} />
                 ))}
               </div>
             </div>
@@ -159,19 +158,23 @@ export default function Chat({ apiKey }) {
         </div>
 
         {/* Input */}
-        <div className="pb-6 pt-4 border-t border-white/5">
+        <div className="pb-6 pt-4 border-t border-gray-200">
           <div className="flex gap-3">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send())}
               placeholder="What's in your fridge? What are you craving?"
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-orange-500/50 transition-colors"
+              className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm placeholder-gray-400 outline-none transition-colors"
+              style={{ color: '#1A1A1A' }}
+              onFocus={e => e.target.style.borderColor = '#2D6A4F'}
+              onBlur={e => e.target.style.borderColor = '#E5E7EB'}
             />
             <button
               onClick={send}
               disabled={!input.trim() || loading}
-              className="px-5 py-3 bg-orange-500 hover:bg-orange-400 text-white rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed text-sm transition-colors"
+              className="px-5 py-3 text-white rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed text-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: '#2D6A4F' }}
             >
               Send
             </button>

@@ -36,7 +36,6 @@ export default function Profile() {
   useEffect(() => { localStorage.setItem('dish-comments', JSON.stringify(comments)); }, [comments]);
 
   const toggleLike = (id) => setLikes(p => ({ ...p, [id]: !p[id] }));
-
   const toggleComments = (id) => setExpanded(p => ({ ...p, [id]: !p[id] }));
 
   const addComment = (id) => {
@@ -52,25 +51,25 @@ export default function Profile() {
   return (
     <div className="max-w-[1200px] mx-auto px-8 py-16">
       {/* Profile Header */}
-      <div className="flex items-start gap-10 mb-14 pb-14 border-b border-white/5">
-        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
+      <div className="flex items-start gap-10 mb-14 pb-14 border-b border-gray-200">
+        <div className="w-28 h-28 rounded-full flex items-center justify-center text-2xl font-bold text-white flex-shrink-0" style={{ background: 'linear-gradient(135deg, #2D6A4F, #C9A84C)' }}>
           {PROFILE.initials}
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-5 mb-3">
-            <h1 className="text-2xl font-bold">{PROFILE.name}</h1>
-            <button className="px-5 py-1.5 rounded-lg border border-white/10 text-sm font-medium text-gray-300 hover:text-white hover:border-white/20 transition-colors">
+            <h1 className="text-2xl font-bold" style={{ color: '#1A1A1A' }}>{PROFILE.name}</h1>
+            <button className="px-5 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-500 hover:text-gray-800 hover:border-gray-300 transition-colors">
               Edit Profile
             </button>
           </div>
-          <p className="text-gray-400 text-sm mb-3">{PROFILE.username}</p>
+          <p className="text-sm mb-3" style={{ color: '#6B7280' }}>{PROFILE.username}</p>
           <div className="flex gap-8 mb-4">
-            <div className="text-sm"><span className="font-bold text-white">{POSTS.length}</span> <span className="text-gray-500">posts</span></div>
-            <div className="text-sm"><span className="font-bold text-white">142</span> <span className="text-gray-500">followers</span></div>
-            <div className="text-sm"><span className="font-bold text-white">89</span> <span className="text-gray-500">following</span></div>
-            <div className="text-sm"><span className="font-bold text-white">{totalLikes}</span> <span className="text-gray-500">likes</span></div>
+            <div className="text-sm"><span className="font-bold" style={{ color: '#1A1A1A' }}>{POSTS.length}</span> <span className="text-gray-500">posts</span></div>
+            <div className="text-sm"><span className="font-bold" style={{ color: '#1A1A1A' }}>142</span> <span className="text-gray-500">followers</span></div>
+            <div className="text-sm"><span className="font-bold" style={{ color: '#1A1A1A' }}>89</span> <span className="text-gray-500">following</span></div>
+            <div className="text-sm"><span className="font-bold" style={{ color: '#1A1A1A' }}>{totalLikes}</span> <span className="text-gray-500">likes</span></div>
           </div>
-          <p className="text-gray-300 text-sm leading-relaxed max-w-md">{PROFILE.bio}</p>
+          <p className="text-sm leading-relaxed max-w-md" style={{ color: '#4B5563' }}>{PROFILE.bio}</p>
         </div>
       </div>
 
@@ -83,22 +82,22 @@ export default function Profile() {
           const showComments = !!expanded[post.id];
 
           return (
-            <div key={post.id} className="rounded-2xl overflow-hidden border border-white/5 bg-white/[0.02]">
+            <div key={post.id} className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm">
               <div className={`h-52 bg-gradient-to-br ${post.color}`} />
               <div className="p-4">
-                <p className="font-semibold text-sm mb-1">{post.meal}</p>
-                <p className="text-xs text-gray-400 mb-4 leading-relaxed">{post.caption}</p>
+                <p className="font-semibold text-sm mb-1" style={{ color: '#1A1A1A' }}>{post.meal}</p>
+                <p className="text-xs mb-4 leading-relaxed" style={{ color: '#6B7280' }}>{post.caption}</p>
                 <div className="flex items-center gap-5">
                   <button
                     onClick={() => toggleLike(post.id)}
-                    className={`flex items-center gap-1.5 text-xs transition-colors ${liked ? 'text-red-400' : 'text-gray-500 hover:text-red-400'}`}
+                    className={`flex items-center gap-1.5 text-xs transition-colors ${liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400'}`}
                   >
                     <span>{liked ? '❤️' : '🤍'}</span>
                     <span>{post.baseL + (liked ? 1 : 0)}</span>
                   </button>
                   <button
                     onClick={() => toggleComments(post.id)}
-                    className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition-colors"
+                    className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 transition-colors"
                   >
                     <span>💬</span>
                     <span>{commentCount}</span>
@@ -106,12 +105,12 @@ export default function Profile() {
                 </div>
 
                 {showComments && (
-                  <div className="mt-4 pt-4 border-t border-white/5">
+                  <div className="mt-4 pt-4 border-t border-gray-100">
                     {postComments.length > 0 && (
                       <div className="space-y-2 mb-3 max-h-28 overflow-y-auto">
                         {postComments.map((c, i) => (
-                          <p key={i} className="text-xs text-gray-400">
-                            <span className="font-medium text-gray-300">you</span> {c.text}
+                          <p key={i} className="text-xs text-gray-500">
+                            <span className="font-medium text-gray-700">you</span> {c.text}
                           </p>
                         ))}
                       </div>
@@ -122,11 +121,15 @@ export default function Profile() {
                         onChange={e => setInputs(p => ({ ...p, [post.id]: e.target.value }))}
                         onKeyDown={e => e.key === 'Enter' && addComment(post.id)}
                         placeholder="Add a comment..."
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-orange-500/50 transition-colors"
+                        className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs placeholder-gray-400 outline-none transition-colors"
+                        style={{ color: '#1A1A1A' }}
+                        onFocus={e => e.target.style.borderColor = '#2D6A4F'}
+                        onBlur={e => e.target.style.borderColor = '#E5E7EB'}
                       />
                       <button
                         onClick={() => addComment(post.id)}
-                        className="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-white rounded-lg text-xs font-medium transition-colors"
+                        className="px-3 py-1.5 text-white rounded-lg text-xs font-medium transition-all hover:opacity-90"
+                        style={{ backgroundColor: '#2D6A4F' }}
                       >
                         Post
                       </button>
