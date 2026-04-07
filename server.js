@@ -26,6 +26,21 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+app.get('/api/pexels', async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) return res.status(400).json({ error: 'query parameter required' });
+    const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+      headers: { Authorization: process.env.PEXELS_API_KEY },
+    });
+    const data = await response.json();
+    const url = data.photos?.[0]?.src?.medium || null;
+    res.json({ url });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Serve React build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'build')));

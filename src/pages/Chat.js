@@ -57,7 +57,7 @@ function getFoodImageUrl(name) {
 }
 
 function getYouTubeUrl(name) {
-  return `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(name + ' recipe quick')}`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' recipe')}`;
 }
 
 // ── Component ───────────────────────────────────────────────────────────────
@@ -149,15 +149,16 @@ export default function Chat({ apiKey }) {
                       <p className="text-[11px] font-semibold uppercase tracking-wide mb-1.5 ml-1" style={{ color: '#9CA3AF' }}>
                         Watch how to make it
                       </p>
-                      <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px', backgroundColor: '#F3F4F6' }}>
-                        <iframe
-                          src={msg.youtubeUrl}
-                          title="Recipe video"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', borderRadius: '12px', border: 'none' }}
-                        />
+                      <div
+                        onClick={() => window.open(msg.youtubeUrl, '_blank')}
+                        style={{ position: 'relative', paddingBottom: '56.25%', borderRadius: '12px', overflow: 'hidden', cursor: 'pointer', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}
+                      >
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                          <div style={{ width: 56, height: 56, borderRadius: '50%', backgroundColor: '#FF0000', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(255,0,0,0.4)' }}>
+                            <span style={{ color: 'white', fontSize: 22, marginLeft: 4 }}>▶</span>
+                          </div>
+                          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, margin: 0 }}>Watch on YouTube →</p>
+                        </div>
                       </div>
                     </div>
                   )}
