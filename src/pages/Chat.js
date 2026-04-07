@@ -2,8 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 
 const SYSTEM = 'You are Chef Claude, a friendly cooking assistant for college students. Give practical, beginner-friendly advice. Be warm, encouraging, and concise. Use simple language.';
 
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://dish-gd8t.onrender.com/api/chat'
+  : '/api/chat';
+
 async function sendToAPI(apiKey, messages) {
-  const res = await fetch('/api/chat', {
+  const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
