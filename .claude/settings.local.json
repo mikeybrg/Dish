@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(tail:*)",
+      "Bash(cd /c/Users/Owner/dish && npm start 2>&1)",
+      "Bash(cd /c/Users/Owner/dish && npx tailwindcss init -p 2>&1)",
+      "Bash(npx kill-port 3000 2>&1 && sleep 3 && cd /c/Users/Owner/dish && npm start 2>&1)",
+      "Bash(npm start:*)",
+      "Bash(npm install:*)",
+      "Bash(node server.js)",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"model\\\\\":\\\\\"claude-sonnet-4-6\\\\\",\\\\\"max_tokens\\\\\":64,\\\\\"messages\\\\\":[{\\\\\"role\\\\\":\\\\\"user\\\\\",\\\\\"content\\\\\":\\\\\"Say hello in one sentence.\\\\\"}]}\")",
+      "Bash(git init:*)"
+    ]
+  }
+}

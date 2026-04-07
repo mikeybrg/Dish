@@ -1,38 +1,47 @@
-.App {
-  text-align: center;
+/* App-specific styles */
+
+/* ── RecipeGuide animations ─────────────────────────────── */
+
+@keyframes rg-slide-in-right {
+  from { transform: translateX(52px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@keyframes rg-slide-in-left {
+  from { transform: translateX(-52px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+@keyframes rg-pop-in {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@keyframes rg-pulse-blob {
+  0%,100% { opacity: 0.45; transform: scale(1);    }
+  50%      { opacity: 0.85; transform: scale(1.08); }
 }
 
-.App-link {
-  color: #61dafb;
+.rg-slide-right {
+  animation: rg-slide-in-right 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.rg-slide-left {
+  animation: rg-slide-in-left 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+.rg-pop-in {
+  animation: rg-pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rg-pulse-blob {
+  animation: rg-pulse-blob 2.8s ease-in-out infinite;
+}
+
+/* Quick-view scrollbar */
+.rg-quickview-list::-webkit-scrollbar { width: 4px; }
+.rg-quickview-list::-webkit-scrollbar-track { background: transparent; }
+.rg-quickview-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+/* Hide scrollbar utility (for horizontal recipe rows) */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
