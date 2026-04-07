@@ -22,6 +22,44 @@ async function sendToAPI(apiKey, messages) {
   return data.content[0].text;
 }
 
+// ── Food image helpers ──────────────────────────────────────────────────────
+
+const FOOD_KEYWORDS = [
+  'recipe', 'ingredient', 'tablespoon', 'teaspoon', 'cup of', 'oven',
+  'simmer', 'sauté', 'fry', 'bake', 'boil', 'roast', 'grill', 'cook',
+  'dish', 'meal', 'serve', 'delicious', 'tasty', 'skillet', 'stir',
+];
+
+const EXTRACT_PATTERNS = [
+  /(?:recipe for|how to make|make|making|cook(?:ing)?|bake|baking|prepare|try)\s+(?:a\s+|an\s+|some\s+)?([A-Z][A-Za-z\s&'-]{2,32}?)(?:[,!.\n(]|$)/,
+  /^([A-Z][A-Za-z\s&'-]{3,30}?)\s+(?:is\s+(?:a|an|one)|are\s+(?:a|great|easy))/m,
+  /Here(?:'s| is) (?:a |an |)?(?:simple |quick |easy |great )?(?:recipe for |)?([A-Z][A-Za-z\s&'-]{3,30}?)(?:[,!.\n]|$)/i,
+  /\*\*([A-Z][A-Za-z\s&'-]{3,30}?)\*\*/,
+];
+
+function extractFoodName(text) {
+  for (const pattern of EXTRACT_PATTERNS) {
+    const m = text.match(pattern);
+    const name = m?.[1]?.trim();
+    if (name && name.length > 2 && name.length < 35 && !/^(Here|Let|Sure|Great|I|You|This|That)$/i.test(name)) {
+      return name;
+    }
+  }
+  return null;
+}
+
+function isFoodResponse(text) {
+  const lower = text.toLowerCase();
+  return FOOD_KEYWORDS.some(kw => lower.includes(kw));
+}
+
+function getFoodImageUrl(name) {
+  const term = encodeURIComponent(name.toLowerCase().replace(/\s+/g, '+'));
+  return `https://source.unsplash.com/400x300/?${term},food`;
+}
+
+// ── Component ───────────────────────────────────────────────────────────────
+
 const GREETING = {
   role: 'assistant',
   content: "Hey! I'm Chef Claude 👋 Tell me what ingredients you have or what you're craving, and I'll help you cook something great.",
@@ -30,8 +68,8 @@ const GREETING = {
 
 export default function Chat({ apiKey }) {
   const [messages, setMessages] = useState([GREETING]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [input, setInput]       = useState('');
+  const [loading, setLoading]   = useState(false);
   const bottomRef = useRef();
 
   useEffect(() => {
@@ -49,7 +87,14 @@ export default function Chat({ apiKey }) {
     try {
       const apiMessages = next.filter(m => !m.local).map(({ role, content }) => ({ role, content }));
       const reply = await sendToAPI(apiKey, apiMessages);
-      setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+
+      let imageUrl = null;
+      if (isFoodResponse(reply)) {
+        const foodName = extractFoodName(reply);
+        if (foodName) imageUrl = getFoodImageUrl(foodName);
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: reply, imageUrl }]);
     } catch (err) {
       const msg = apiKey === 'YOUR_KEY_HERE'
         ? 'Add your Anthropic API key in App.js to start chatting.'
@@ -72,20 +117,33 @@ export default function Chat({ apiKey }) {
         <div className="flex-1 overflow-y-auto py-6 space-y-5">
           {messages.map((msg, i) => (
             <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+
               {msg.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-base flex-shrink-0 mt-0.5">
                   👨‍🍳
                 </div>
               )}
-              <div
-                className={`max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                  msg.role === 'user'
-                    ? 'bg-orange-500 text-white rounded-br-sm'
-                    : 'bg-white/5 border border-white/5 text-gray-200 rounded-bl-sm'
-                }`}
-              >
-                {msg.content}
-              </div>
+
+              {/* Assistant bubble — with or without image */}
+              {msg.role === 'assistant' ? (
+                <div className="max-w-[78%] rounded-2xl rounded-bl-sm overflow-hidden border border-white/5 bg-white/5 text-sm text-gray-200 leading-relaxed">
+                  {msg.imageUrl && (
+                    <img
+                      src={msg.imageUrl}
+                      alt="food"
+                      className="w-full object-cover"
+                      style={{ height: 200 }}
+                      onError={e => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  )}
+                  <p className="px-4 py-3 whitespace-pre-wrap">{msg.content}</p>
+                </div>
+              ) : (
+                <div className="max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap bg-orange-500 text-white rounded-br-sm">
+                  {msg.content}
+                </div>
+              )}
+
             </div>
           ))}
 
