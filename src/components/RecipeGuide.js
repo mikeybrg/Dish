@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+const API_BASE = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
 
 // ── Step keyword → emoji + colour theme ─────────────────────────────────────
 const PATTERNS = [
@@ -97,17 +99,50 @@ function ModeToggle({ mode, setMode }) {
 
 // ── Main component ───────────────────────────────────────────────────────────
 export default function RecipeGuide({ recipe, onShare, compact = false }) {
-  const [step, setStep]         = useState(0);
-  const [mode, setMode]         = useState('guided');
-  const [slideDir, setSlideDir] = useState('right');
-  const [slideKey, setSlideKey] = useState(0);
+  const [step, setStep]               = useState(0);
+  const [mode, setMode]               = useState('guided');
+  const [slideDir, setSlideDir]       = useState('right');
+  const [slideKey, setSlideKey]       = useState(0);
+  const [stepImg, setStepImg]         = useState(null);
+  const [stepImgLoading, setStepImgLoading] = useState(false);
+  const imgCacheRef = useRef({});
 
   // Reset whenever a new recipe is loaded
   useEffect(() => {
     setStep(0);
     setMode('guided');
     setSlideKey(0);
+    setStepImg(null);
   }, [recipe]);
+
+  // Fetch AI-generated image for the current step
+  useEffect(() => {
+    if (step >= recipe.steps.length) return;
+    const key = `${recipe.name}::${step}`;
+    if (imgCacheRef.current[key]) {
+      setStepImg(imgCacheRef.current[key]);
+      setStepImgLoading(false);
+      return;
+    }
+    setStepImg(null);
+    setStepImgLoading(true);
+    fetch(`${API_BASE}/api/generate-image`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        prompt: `simple clean illustration of ${recipe.steps[step]}, cooking, food photography, white background`,
+      }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.url) {
+          imgCacheRef.current[key] = data.url;
+          setStepImg(data.url);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setStepImgLoading(false));
+  }, [step, recipe]);
 
   const done     = step >= recipe.steps.length;
   const meta     = done ? null : getStepMeta(recipe.steps[step]);
@@ -360,6 +395,21 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
           <div style={{ width: '100%', height: '3px', background: 'rgba(0,0,0,0.08)', borderRadius: '4px', marginBottom: compact ? '16px' : '22px', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${progress}%`, background: theme.bar, borderRadius: '4px', transition: 'width 0.5s ease' }} />
           </div>
+
+          {/* AI-generated step image */}
+          {stepImgLoading && (
+            <div
+              className="skeleton"
+              style={{ height: 160, borderRadius: 12, marginBottom: compact ? 16 : 20 }}
+            />
+          )}
+          {stepImg && !stepImgLoading && (
+            <img
+              src={stepImg}
+              alt={`Step ${step + 1}`}
+              style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 12, marginBottom: compact ? 16 : 20 }}
+            />
+          )}
 
           {/* Instruction text */}
           <p style={{

@@ -26,6 +26,32 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+app.post('/api/generate-image', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'prompt required' });
+    const response = await fetch('https://api.together.xyz/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.TOGETHER_API_KEY}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'black-forest-labs/FLUX.1-schnell-Free',
+        prompt,
+        n: 1,
+        width: 512,
+        height: 256,
+      }),
+    });
+    const data = await response.json();
+    const url = data.data?.[0]?.url || null;
+    res.json({ url });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/pexels', async (req, res) => {
   try {
     const { query } = req.query;
