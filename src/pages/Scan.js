@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import RecipeGuide from '../components/RecipeGuide';
 
+const API_BASE = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
+
 function parseJSON(text) {
   try { return JSON.parse(text); } catch {
     const m = text.match(/\{[\s\S]*\}/);
@@ -10,7 +12,7 @@ function parseJSON(text) {
 }
 
 async function analyzeFood(apiKey, base64, mimeType) {
-  const res = await fetch('/api/chat', {
+  const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({

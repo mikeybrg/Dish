@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:3000', 'https://dish-gd8t.onrender.com'] }));
+app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '10mb' }));
 
 app.post('/api/chat', async (req, res) => {

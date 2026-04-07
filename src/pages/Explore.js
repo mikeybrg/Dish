@@ -32,6 +32,8 @@ const DIFF_COLORS = {
   Hard:   'bg-red-500/15 text-red-400 border border-red-500/20',
 };
 
+const API_BASE = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
+
 function parseJSON(text) {
   try { return JSON.parse(text); } catch {
     const m = text.match(/\{[\s\S]*\}/);
@@ -41,7 +43,7 @@ function parseJSON(text) {
 }
 
 async function fetchRecipe(apiKey, name) {
-  const res = await fetch('/api/chat', {
+  const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
