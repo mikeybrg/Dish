@@ -37,7 +37,7 @@ app.post('/api/generate-image', async (req, res) => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'black-forest-labs/FLUX.1-schnell-Free',
+        model: 'black-forest-labs/FLUX.1-schnell',
         prompt,
         n: 1,
         width: 512,
@@ -45,7 +45,10 @@ app.post('/api/generate-image', async (req, res) => {
       }),
     });
     const data = await response.json();
-    res.json({ raw: data });
+    if (data.error) return res.status(500).json({ error: data.error.message });
+    const item = data.data?.[0];
+    const url = item?.url || (item?.b64_json ? `data:image/png;base64,${item.b64_json}` : null);
+    res.json({ url });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
