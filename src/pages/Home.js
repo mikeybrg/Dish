@@ -9,7 +9,7 @@ const FEATURES = [
     icon: '🍳',
     title: 'Explore Recipes',
     desc: 'Browse college-friendly meals filtered by time, budget, difficulty, and dietary needs.',
-    page: 'Explore',
+    page: 'Recipes',
   },
   {
     icon: '👨‍🍳',
@@ -17,6 +17,19 @@ const FEATURES = [
     desc: 'Chat with your personal AI chef for substitutions, techniques, and meal ideas based on what you have.',
     page: 'Chat',
   },
+  {
+    icon: '🎨',
+    title: 'AI Visual Guides',
+    desc: 'Every cooking step gets a unique AI-generated image — so you can see exactly what to do, not just read it.',
+    page: 'Scan',
+  },
+];
+
+const STATS = [
+  '75+ Recipes',
+  'AI Step Images',
+  'Free Forever',
+  'No Experience Needed',
 ];
 
 export default function Home({ onNavigate }) {
@@ -27,7 +40,7 @@ export default function Home({ onNavigate }) {
         <div className="absolute inset-0 pointer-events-none">
           <div style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45,106,79,0.07) 0%, transparent 70%)' }} className="absolute inset-0" />
         </div>
-        <div className="max-w-[1200px] mx-auto px-8 pt-32 pb-28 text-center relative">
+        <div className="max-w-[1200px] mx-auto px-8 pt-32 pb-16 text-center relative">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm mb-8" style={{ borderColor: 'rgba(45,106,79,0.3)', backgroundColor: 'rgba(45,106,79,0.06)', color: '#2D6A4F' }}>
             <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '#2D6A4F' }} />
             Now in beta — 100% free for students
@@ -39,10 +52,9 @@ export default function Home({ onNavigate }) {
             </span>
           </h1>
           <p className="text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#6B7280' }}>
-            Apron AI turns whatever's in your fridge into real meals. Snap a photo, explore recipes,
-            or chat with your personal AI chef — no culinary degree required.
+            Snap a photo, get AI-generated step-by-step visual guides for any meal. No experience needed.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center mb-10">
             <button
               onClick={() => onNavigate('Scan')}
               className="px-8 py-4 text-white font-semibold rounded-xl text-base transition-all hover:opacity-90"
@@ -51,26 +63,38 @@ export default function Home({ onNavigate }) {
               Get Started Free →
             </button>
             <button
-              onClick={() => onNavigate('Explore')}
+              onClick={() => onNavigate('Recipes')}
               className="px-8 py-4 border border-gray-200 text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-semibold rounded-xl text-base transition-colors"
             >
               Browse Recipes
             </button>
           </div>
+
+          {/* Stats bar */}
+          <div className="flex items-center justify-center gap-0 flex-wrap">
+            {STATS.map((stat, i) => (
+              <div key={stat} className="flex items-center">
+                <span className="text-sm font-medium px-4" style={{ color: '#6B7280' }}>{stat}</span>
+                {i < STATS.length - 1 && (
+                  <span style={{ color: '#D1D5DB' }}>·</span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Features */}
-      <section className="max-w-[1200px] mx-auto px-8 pb-28">
-        <div className="grid grid-cols-3 gap-6">
+      <section className="max-w-[1200px] mx-auto px-8 pb-28 pt-12">
+        <div className="grid grid-cols-4 gap-5">
           {FEATURES.map(f => (
             <button
               key={f.title}
               onClick={() => onNavigate(f.page)}
-              className="text-left p-8 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all group"
+              className="text-left p-7 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all group"
             >
               <div className="text-4xl mb-5">{f.icon}</div>
-              <h3 className="text-lg font-semibold mb-3 transition-colors group-hover:text-[#2D6A4F]" style={{ color: '#1A1A1A' }}>{f.title}</h3>
+              <h3 className="text-base font-semibold mb-2 transition-colors group-hover:text-[#2D6A4F]" style={{ color: '#1A1A1A' }}>{f.title}</h3>
               <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{f.desc}</p>
             </button>
           ))}

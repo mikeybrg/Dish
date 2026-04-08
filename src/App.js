@@ -11,7 +11,7 @@ import Community from './pages/Community';
 const ANTHROPIC_API_KEY = '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';
 // ─────────────────────────────────────────
 
-const NAV = ['Home', 'Scan', 'Explore', 'Recipes', 'Chat', 'Profile', 'Community'];
+const NAV = ['Home', 'Scan', 'Recipes', 'Chat', 'Community'];
 
 export default function App() {
   const [page, setPage] = useState('Home');
@@ -23,7 +23,8 @@ export default function App() {
           <button onClick={() => setPage('Home')} className="text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: '#2D6A4F' }}>
             👨‍🍳 Apron AI
           </button>
-          <div className="flex gap-1">
+
+          <div className="flex items-center gap-1">
             {NAV.map(id => (
               <button
                 key={id}
@@ -38,14 +39,24 @@ export default function App() {
                 {id}
               </button>
             ))}
+
+            {/* Profile avatar */}
+            <button
+              onClick={() => setPage('Profile')}
+              className="ml-2 w-9 h-9 rounded-full flex items-center justify-center text-white text-base transition-all hover:opacity-80"
+              style={{ backgroundColor: page === 'Profile' ? '#245a42' : '#2D6A4F' }}
+              title="Profile"
+            >
+              👤
+            </button>
           </div>
         </div>
       </nav>
 
       {page === 'Home'      && <Home onNavigate={setPage} />}
       {page === 'Scan'      && <Scan apiKey={ANTHROPIC_API_KEY} onNavigate={setPage} />}
-      {page === 'Explore'   && <Explore apiKey={ANTHROPIC_API_KEY} onNavigate={setPage} />}
       {page === 'Recipes'   && <Recipes apiKey={ANTHROPIC_API_KEY} />}
+      {page === 'Explore'   && <Explore apiKey={ANTHROPIC_API_KEY} onNavigate={setPage} />}
       {page === 'Chat'      && <Chat apiKey={ANTHROPIC_API_KEY} />}
       {page === 'Profile'   && <Profile />}
       {page === 'Community' && <Community />}

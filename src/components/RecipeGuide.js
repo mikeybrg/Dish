@@ -2,6 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 
 const API_BASE = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
 
+function buildImagePrompt(stepText) {
+  // Use the first sentence only, capped at 80 chars
+  const first = stepText.split(/[.!]/)[0].trim();
+  const condensed = first.length > 80 ? first.slice(0, 77) + '...' : first;
+  return `professional food photography, close up, ${condensed}, clean white background, soft natural lighting, sharp focus, high detail, no text, no people`;
+}
+
 // ── Step keyword → emoji + colour theme ─────────────────────────────────────
 const PATTERNS = [
   { re: /chop|dice|slice|cut|mince|julienne|shred|peel|grat/,  emoji: '🔪',  theme: 'blue'   },
@@ -130,7 +137,7 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        prompt: `simple clean illustration of ${recipe.steps[step]}, cooking, food photography, white background`,
+        prompt: buildImagePrompt(recipe.steps[step]),
       }),
     })
       .then(r => r.json())
@@ -371,20 +378,6 @@ export default function RecipeGuide({ recipe, onShare, compact = false }) {
         />
 
         <div style={{ padding: compact ? '22px' : '30px', position: 'relative' }}>
-
-          {/* Emoji badge */}
-          <div style={{
-            width: compact ? '60px' : '76px',
-            height: compact ? '60px' : '76px',
-            borderRadius: '18px',
-            background: theme.ring,
-            border: `1px solid ${theme.ringBorder}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: compact ? '30px' : '38px',
-            marginBottom: compact ? '18px' : '22px',
-          }}>
-            {meta.emoji}
-          </div>
 
           {/* Step label */}
           <div style={{ fontSize: '11px', fontWeight: 700, color: theme.label, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>

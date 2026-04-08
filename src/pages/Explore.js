@@ -94,14 +94,29 @@ function YouTubeEmbed({ name }) {
       </p>
       <div
         onClick={() => window.open(url, '_blank')}
-        style={{ position: 'relative', paddingBottom: '56.25%', borderRadius: '12px', overflow: 'hidden', cursor: 'pointer', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}
+        style={{
+          position: 'relative', paddingBottom: '42%', borderRadius: '14px', overflow: 'hidden',
+          cursor: 'pointer', boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
+          background: 'linear-gradient(145deg, #1a1a2e 0%, #0f0f23 60%, #1a0a0a 100%)',
+        }}
       >
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <div style={{ width: 56, height: 56, borderRadius: '50%', backgroundColor: '#FF0000', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(255,0,0,0.4)' }}>
-            <span style={{ color: 'white', fontSize: 22, marginLeft: 4 }}>▶</span>
+        {/* Subtle vignette overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+          {/* Play button */}
+          <div style={{
+            width: 52, height: 52, borderRadius: '50%',
+            background: '#FF0000',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 0 6px rgba(255,0,0,0.18), 0 6px 24px rgba(255,0,0,0.45)',
+          }}>
+            <span style={{ color: 'white', fontSize: 20, marginLeft: 4 }}>▶</span>
           </div>
-          <p style={{ color: 'white', fontWeight: 600, fontSize: 14, textAlign: 'center', padding: '0 20px', margin: 0 }}>{name}</p>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, margin: 0 }}>Watch on YouTube →</p>
+          <p style={{ color: 'white', fontWeight: 700, fontSize: 14, textAlign: 'center', padding: '0 24px', margin: 0, textShadow: '0 1px 6px rgba(0,0,0,0.6)', letterSpacing: '0.01em' }}>{name}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ color: '#FF0000', fontSize: 11, fontWeight: 700 }}>▶ YouTube</span>
+            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>· Watch recipe</span>
+          </div>
         </div>
       </div>
     </div>
